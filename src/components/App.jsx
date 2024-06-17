@@ -15,6 +15,24 @@ export class App extends Component {
     filter: "",
   };
 
+  componentDidMount() {
+    const savedContacts = localStorage.getItem("contacts");
+
+    if (savedContacts !== null) {
+      // If something has already been saved in localStorage, we write THIS in the state
+      this.setState({ contacts: JSON.parse(savedContacts) });
+    }
+  }
+
+  componentDidUpdate(_prevProps, prevState) {
+    const { contacts } = this.state;
+
+    if (contacts !== prevState.contacts) {
+      // if a contact is new, set value to localStorage
+      localStorage.setItem("contacts", JSON.stringify(contacts));
+    }
+  }
+
   addContact = (name, number) => {
     const newContact = { id: nanoid(), name, number };
     this.setState((prevState) => ({
